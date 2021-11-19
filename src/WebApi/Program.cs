@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using UserApi.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 //var connectionString = builder.Configuration["ConnectionStrings:DefaultConnection"];
 
+//builder.Services.AddHealthChecks();
+
+//builder.Services.AddHealthChecks().AddDbContextCheck<UserDbContext>();
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -39,9 +44,35 @@ app.MapGet("/", () =>
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseRouting();
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+//app.UseEndpoints(endpoints =>
+//{
+//    //A failed liveness probe says: The application has crashed. You should shut it down and restart.
+//    endpoints.MapHealthChecks("/health/live", new HealthCheckOptions()
+//    {
+//        ResultStatusCodes =
+//        {
+//            [HealthStatus.Healthy] = StatusCodes.Status200OK,
+//            [HealthStatus.Degraded] = StatusCodes.Status200OK,
+//            [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+//        }
+//    });
+//    //A failed readiness probe says: The application is OK but not yet ready to serve traffic.
+//    endpoints.MapHealthChecks("/health/ready", new HealthCheckOptions()
+//    {
+//        ResultStatusCodes =
+//        {
+//            [HealthStatus.Healthy] = StatusCodes.Status200OK,
+//            [HealthStatus.Degraded] = StatusCodes.Status503ServiceUnavailable,
+//            [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+//        }
+//    });
+//});
 
 UserDbSeeder.Seed(app.Services);
 
