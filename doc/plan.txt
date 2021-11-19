@@ -1,0 +1,64 @@
+1. Показать команды докера:
+    - дать ссылку на документацию: https://docs.docker.com/reference/
+	- список образов: docker image ls
+	- список контейнеров: docker ps -a
+2. Показать заготовку проекта, подключение к базе; UserDbSeeder - создание бд; запустить под iis
+	http://localhost/swagger
+
+3. показать dockerfile проекта
+4. Показать команды докера: 
+	
+	- Сбилдить dockerfile из консоли:
+	docker build -f "C:\Users\Andrew\source\repos\kt-pgsql-in-docker\src\WebApi\Dockerfile" --force-rm -t kt-api  "C:\Users\Andrew\source\repos\kt-pgsql-in-docker\src"	
+	- Показать image:
+	docker image ls	
+	- Сбилдить dockerfile из студии, показать <DockerfileTag>kt-api</DockerfileTag>
+	
+	- Сбилдить контейнер:
+	docker container create --name kt-api kt-api	
+	- Показать список:
+	docker ps -a	
+	- Запустить контейнер:
+	docker start 
+	- Контэйнер не запустился, смотрим логи, видим ошибку строки подключения. Это потому, что из сети контейнера pg не видно:
+	docker logs
+	
+5.	- Рассказать про host.docker.internal
+	- Показать как настроить pg
+	- грохнуть контэйнер: docker container rm
+	- пересобрать, запустить
+	- показать детали: docker container inspect
+	- стоп\удаление контэйнера
+	- пересборка и запуск с run + проброс портов (run = create + start):
+	docker run --detach --name kt-api -p 8080:80 kt-api	
+	
+!!!Ура, получили доступ к pg. Переходим к docker-compose
+ 
+6. Добавляем docker-compose
+
+	- Пробрасываем наружу порт 8080:80	
+	- идем в /src, билдим и поднимаем docker-compose:
+	cd ..
+	docker compose build
+	docker compose up -d
+	
+7. Переносим строку подключения в env, запускаем
+8. Запускаем pg в контейнере
+        - создаем сеть
+		- создаем образ, настраеваем сеть и строку подключения
+        - добавляем pg из репозитория https://hub.docker.com/_/postgres
+		- настраеваем переменные окружения
+9. Подключаем Volume, показываем что данные сохраняются
+
+10. ENV и секреты:
+	- Убираем строку из продакшена
+	- Убираем строку в dockerfile
+
+11. Вопросы
+
+---------------
+
+11 Health check
+		
+		
+	

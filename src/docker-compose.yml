@@ -1,0 +1,35 @@
+version: '3.4'
+
+#networks:
+#  kt-api:
+#    driver: bridge 
+
+services:
+  webapi:
+    image: ${DOCKER_REGISTRY-}kt-api
+    build:
+      context: .
+      dockerfile: WebApi/Dockerfile
+    #ports:
+    #  - 8080:80
+    #environment:
+    #  - ConnectionStrings__DefaultConnection=Host=host.docker.internal;Database=kt_users;Username=postgres;Password=qwerty;
+    #  - ConnectionStrings__DefaultConnection=Host=postgres_image;Database=kt_users;Username=postgres;Password=qwerty;    
+    #networks:
+    #  - kt-api
+#  postgres_image:
+#    image: postgres:latest
+#    ports:
+#      - 5432:5432
+#    restart: always
+#    volumes:
+#      - db_volume:/var/lib/postgresql/data
+#    environment:
+#      POSTGRES_USER: user
+#      POSTGRES_PASSWORD: qwerty
+#      POSTGRES_DB: kt_users
+#    networks:
+#      - userapi
+#volumes:
+#  db_volume:
+#    driver: local
